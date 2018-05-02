@@ -148,7 +148,6 @@ public class Application {
                 if (data.moveToFirst()) {
                     do {
                         // get the data into array, or class variable
-                        // get the data into array, or class variable
                         Latitude lati = new Latitude(data.getDouble(6), data.getDouble(7), data.getDouble(8), data.getString(9));
                         Longitude longi = new Longitude(data.getDouble(10), data.getDouble(11), data.getDouble(12), data.getString(13));
                         Corridor corridor = new Corridor(data.getString(0), data.getString(5), data.getDouble(2), data.getDouble(3), data.getDouble(4), lati, longi);

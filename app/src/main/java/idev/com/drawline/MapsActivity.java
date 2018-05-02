@@ -124,15 +124,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         txt_azimuth = (TextView) findViewById(R.id.txt_azimuth);
         compass_arrow = (ImageView) findViewById(R.id.arrow);
         instructionTxt = (TextView) findViewById(R.id.instructionText);
         steptx = (TextView) findViewById(R.id.stepTxt);
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        simpleStepDetector = new StepDetector();
+
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        simpleStepDetector = new StepDetector();
         simpleStepDetector.registerListener(MapsActivity.this);
+
         inputPath = null;
         isStart = false;
 //        Dexter.withActivity(this)
@@ -184,11 +187,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        findViewById(R.id.btnStop).setOnClickListener(new View.OnClickListener() {
+        /*findViewById(R.id.btnStop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             }
-        });
+        });*/
     }
 
 
@@ -219,7 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //            options.add(point);
             mMap.addCircle(new CircleOptions()
                     .center(point)
-                    .radius(0.5)
+                    .radius(0.3)
                     .strokeColor(color)
                     .fillColor(color));
         }
@@ -408,26 +411,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         txt_azimuth.setText(where);
 
         if (inputPath != null && isStart) {
-//            System.out.println("is start :");
             if (inputPath.getAsal().equals("IF1.01.01") && inputPath.getTujuan().equals("IF1.01.08")) { //Academy service room to meeting room
                 System.out.println("ke " + where);
-                if (numSteps < 3) {
+                if (numSteps == 2) {
+                    marker.setPosition(new LatLng(getCorridorbyID("CD1_2").getLati() * -1, getCorridorbyID("CD1_2").getLongi()));
+                } else if (numSteps == 12) {
+                    marker.setPosition(new LatLng(getCorridorbyID("CD1_3").getLati() * -1, getCorridorbyID("CD1_3").getLongi()));
+                } else if (numSteps == 18) {
+                    marker.setPosition(new LatLng(getCorridorbyID("CD1_4").getLati() * -1, getCorridorbyID("CD1_4").getLongi()));
+                } else if (numSteps == 22) {
+                    marker.setPosition(new LatLng(getCorridorbyID("CD1_5").getLati() * -1, getCorridorbyID("CD1_5").getLongi()));
+                } else if (numSteps == 26) {
+                    marker.setPosition(new LatLng(getCorridorbyID("CD1_6").getLati() * -1, getCorridorbyID("CD1_6").getLongi()));
+                } else if (numSteps == 29) {
+                    marker.setPosition(new LatLng(getCorridorbyID("CD1_7").getLati() * -1, getCorridorbyID("CD1_7").getLongi()));
+                }
+                if (numSteps < 2) {
                     if (!where.equals("W")) {
                         instructionTxt.setText("HEAD WEST");
                     } else {
-                        instructionTxt.setText("Move 2 step foward");
+                        instructionTxt.setText("Move " + (2 - numSteps) + " step foward");
                     }
                 } else if (numSteps < 29) {
                     if (!where.equals("S")) {
                         instructionTxt.setText("HEAD SOUTH");
                     } else {
-                        instructionTxt.setText("Move 27 step foward");
+                        instructionTxt.setText("Move " + (29 - numSteps) + " step foward");
                     }
                 } else if (numSteps < 31) {
                     if (!where.equals("W")) {
                         instructionTxt.setText("HEAD WEST");
                     } else {
-                        instructionTxt.setText("Move 2 step foward");
+                        instructionTxt.setText("Move " + (31 - numSteps) + " step foward");
                     }
                 } else if (numSteps > 31) {
                     instructionTxt.setText("You have arrived at the destination");
@@ -505,7 +520,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     } else {
                         instructionTxt.setText("Move 4 step foward");
                     }
-                } else if (numSteps > 55){
+                } else if (numSteps > 55) {
                     instructionTxt.setText("You have arrived at the destination");
                 }
 
@@ -565,7 +580,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
@@ -631,10 +645,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void step(long timeNs) {
         numSteps++;
-        steptx.setText(numSteps);
+        steptx.setText(" " + numSteps + " ");
 
-        /*Toast.makeText(MapsActivity.this, String.valueOf(numSteps), Toast.LENGTH_SHORT).show();
-        Dexter.withActivity(this)
+//        Toast.makeText(MapsActivity.this, String.valueOf(numSteps), Toast.LENGTH_SHORT).show();
+        /*Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -656,10 +670,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .addOnSuccessListener(MapsActivity.this, new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-
                                 // Got last known location. In some rare situations this can be null.
                                 if (location != null) {
-
                                     // Logic to handle location object
                                     if (marker != null)
                                         marker.remove();
@@ -670,7 +682,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         });
             }
-
             @Override
             public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) { ... }
         }).check();*/
