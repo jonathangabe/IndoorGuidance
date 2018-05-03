@@ -194,7 +194,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });*/
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -222,7 +221,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //            options.add(point);
             mMap.addCircle(new CircleOptions()
                     .center(point)
-                    .radius(0.3)
+                    .radius(0.25)
                     .strokeColor(color)
                     .fillColor(color));
         }
@@ -241,7 +240,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(startLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(20));
     }
-
 
     private void refreshMap() {
         for (Room room : application.getRoombyLantai("1")) {
@@ -266,12 +264,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .strokeColor(Color.BLACK)
                     .fillColor(Color.BLACK));
         }
+
         LatLng startLatLng = new LatLng(application.getRoombyLantai("1").get(0).getLati() * -1, application.getRoombyLantai("1").get(0).getLongi());
 //        mMap.addPolyline(options);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(startLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(25));
     }
-
 
     private void showInputPath() {
         Bundle bundle = new Bundle();
@@ -425,6 +423,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     marker.setPosition(new LatLng(getCorridorbyID("CD1_6").getLati() * -1, getCorridorbyID("CD1_6").getLongi()));
                 } else if (numSteps == 29) {
                     marker.setPosition(new LatLng(getCorridorbyID("CD1_7").getLati() * -1, getCorridorbyID("CD1_7").getLongi()));
+                } else if (numSteps == 31) {
+                    marker.setPosition(new LatLng(getRoomByID("IF1.01.08").getLati() * -1, getRoomByID("IF1.01.08").getLongi()));
                 }
                 if (numSteps < 2) {
                     if (!where.equals("W")) {
@@ -453,21 +453,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (!where.equals("N")) {
                         instructionTxt.setText("HEAD NORTH");
                     } else {
-                        instructionTxt.setText("Move 2 step foward");
+                        instructionTxt.setText("Move " + (2 - numSteps) + " step foward");
                     }
                 } else if (numSteps < 98) {
                     if (!where.equals("W")) {
                         instructionTxt.setText("HEAD WEST");
                     } else {
-                        instructionTxt.setText("Move 96 step foward");
+                        instructionTxt.setText("Move " + (98 - numSteps) + " step foward");
                     }
-                } else if (numSteps < 31) {
+                } else if (numSteps < 100) {
                     if (!where.equals("N")) {
                         instructionTxt.setText("HEAD NORTH");
                     } else {
-                        instructionTxt.setText("Move 2 step foward");
+                        instructionTxt.setText("Move " + (100 - numSteps) + " step foward");
                     }
-                } else if (numSteps > 31) {
+                } else if (numSteps > 100) {
                     instructionTxt.setText("You have arrived at the destination");
                 }
 
